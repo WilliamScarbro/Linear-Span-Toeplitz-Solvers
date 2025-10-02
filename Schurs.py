@@ -37,13 +37,13 @@ def schur_prog(p,b,N,k,v,Vm,Vp,x,X):
     # assert T_k * v_new = e_0
     print("T_k v_k:",vec2toeplitz(p[0:k])@np.array(v_new))
 
-    X_ip = dot(rev(p[1:k]),x)
-    print("X_ip[0]",X_ip)
+    #X_ip = dot(rev(p[1:k]),x)
+    #print("X_ip[0]",X_ip)
     eta = b[k-1] - X_ip
     # print("eta ip",eta)
     x_new = [x[i]+eta*v_new[i] for i in range(k-1)] + [eta*v_new[k-1]]
 
-    X_ip = [dot(rev(p[1+q:k+q]),x) for q in range(N-k+1)]
+    #X_ip = [dot(rev(p[1+q:k+q]),x) for q in range(N-k+1)]
     print("X ip",X_ip)
     print("X",X)
 
@@ -79,6 +79,7 @@ def schur_levinsons(p,b,N):
     for k in range(2,N+1):
         v,Vp,Vm,x,X = schur_prog(p,b,N,k,v,Vp,Vm,x,X)
 
+
     # probably requires last step on only x
     
     return x,0
@@ -88,7 +89,8 @@ if __name__=="__main__":
     sl_counter = levinsons_generic_op_counter(schur_levinsons)
 
     n = int(sys.argv[1])
-    sample = generate_sample(easy_gen,n,1)
+    trials = int(sys.argv[2]) if len(sys.argv)>2 else 1
+    sample = generate_sample(easy_gen,n,trials)
     print(sample)
     stab = get_stability(n,sample,sl_solver)
     print("error:",stab)
